@@ -1,4 +1,4 @@
-import HelloQelos from './components/HelloQelos.vue';
+import CustomTable from './components/CustomTable.vue';
 
 declare global {
   interface Window {
@@ -7,5 +7,5 @@ declare global {
 }
 
 if (typeof window.registerComponent === 'function') {
-  window.registerComponent('HelloQelos', HelloQelos);
+  window.registerComponent('CustomTable', CustomTable);
 }
