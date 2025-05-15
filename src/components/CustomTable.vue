@@ -30,6 +30,17 @@
           <template #default="scope" v-else-if="column.renderFunction">
             {{ column.renderFunction(scope.row) }}
           </template>
+          <template #default="scope" v-else-if="column.prop.includes('hostname')">
+            <a 
+              v-if="getNestedValue(scope.row, column.prop) !== '—'" 
+              :href="`https://${getNestedValue(scope.row, column.prop)}`" 
+              target="_blank"
+              class="hostname-link"
+            >
+              {{ getNestedValue(scope.row, column.prop) }}
+            </a>
+            <span v-else>—</span>
+          </template>
           <template #default="scope" v-else-if="column.prop.includes('.')">
             {{ getNestedValue(scope.row, column.prop) }}
           </template>
@@ -262,5 +273,15 @@ const handleCurrentChange = (val: number) => {
 :deep(.el-pagination .el-pager li.is-active) {
   background-color: #4a4e69;
   color: white;
+}
+.hostname-link {
+  color: var(--el-color-primary, #409eff);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.hostname-link:hover {
+  color: var(--el-color-primary-light-3, #79bbff);
+  text-decoration: underline;
 }
 </style>
