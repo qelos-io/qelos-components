@@ -27,19 +27,19 @@
               </el-button>
             </div>
           </template>
-          <template #default="scope" v-else-if="column.renderFunction">
-            {{ column.renderFunction(scope.row) }}
-          </template>
-          <template #default="scope" v-else-if="column.prop.includes('hostname')">
+          <template #default="scope" v-else-if="column.prop === 'hostname'">
             <a 
-              v-if="getNestedValue(scope.row, column.prop) !== '—'" 
-              :href="`https://${getNestedValue(scope.row, column.prop)}`" 
+              v-if="column.renderFunction(scope.row) !== '—'" 
+              :href="`https://${column.renderFunction(scope.row)}`" 
               target="_blank"
               class="hostname-link"
             >
-              {{ getNestedValue(scope.row, column.prop) }}
+              {{ column.renderFunction(scope.row) }}
             </a>
             <span v-else>—</span>
+          </template>
+          <template #default="scope" v-else-if="column.renderFunction">
+            {{ column.renderFunction(scope.row) }}
           </template>
           <template #default="scope" v-else-if="column.prop.includes('.')">
             {{ getNestedValue(scope.row, column.prop) }}
@@ -95,7 +95,7 @@ const columns = [
     fixed: false
   },
   {
-    prop: "tenants[0].metadata.hostname",
+    prop: "hostname",
     label: "Hostname",
     fixed: false,
     renderFunction: (row: any) => {
