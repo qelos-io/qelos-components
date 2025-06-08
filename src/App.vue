@@ -3,6 +3,7 @@ import QelosSDK from '@qelos/sdk';
 import HelloQelos from './components/HelloQelos.vue';
 import CustomTable from './components/CustomTable.vue';
 import NotesPriorityGraph from './components/NotesPriorityGraph.vue';
+import NotesPriorityBarChart from './components/NotesPriorityBarChart.vue';
 import { ref } from 'vue';
 import { Edit, Delete } from '@element-plus/icons-vue';
 
@@ -183,6 +184,14 @@ const handleDelete = (row) => {
     <div class="section">
       <h2>Notes Priority Graph</h2>
       <NotesPriorityGraph 
+        :notes="notesData" 
+      />
+
+    </div>
+
+    <div class="section">
+      <h2>Notes Priority Bar Chart</h2>
+      <NotesPriorityBarChart 
         :notes="notesData" 
       />
 

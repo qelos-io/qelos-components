@@ -1,23 +1,24 @@
 <template>
-  <div class="notes-priority-graph">
+  <div class="notes-priority-bar-chart">
     <h2>Notes by Priority</h2>
     <v-chart class="chart" :option="chartOption" autoresize />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, inject, onMounted, ref } from 'vue'
+import { computed, inject } from 'vue'
 import { use } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
-import { PieChart } from 'echarts/charts'
+import { BarChart } from 'echarts/charts'
 import {
   TitleComponent,
   TooltipComponent,
   LegendComponent,
-  GridComponent
+  GridComponent,
+  DatasetComponent
 } from 'echarts/components'
 import VChart from 'vue-echarts'
-
+  
 // Define props to allow passing notes directly
 const props = defineProps({
   notes: {
@@ -29,11 +30,12 @@ const props = defineProps({
 // Register ECharts components
 use([
   CanvasRenderer,
-  PieChart,
+  BarChart,
   TitleComponent,
   TooltipComponent,
   LegendComponent,
-  GridComponent
+  GridComponent,
+  DatasetComponent
 ])
 
 // Access the notes from the page context if available
@@ -65,8 +67,19 @@ const chartOption = computed(() => {
     }
   })
 
-  // Prepare data for the pie chart
-  const seriesData = Object.entries(priorityCounts).map(([name, value]) => ({ name, value }))
+  // Prepare data for the bar chart
+  const categories = Object.keys(priorityCounts)
+  const data = Object.values(priorityCounts)
+  
+  // Define colors for different priorities
+  const colors = {
+    high: '#ff4d4f',
+    medium: '#faad14',
+    low: '#52c41a'
+  }
+  
+  // Create color array in the same order as categories
+  const colorList = categories.map(category => colors[category])
 
   return {
     title: {
@@ -74,41 +87,44 @@ const chartOption = computed(() => {
       left: 'center'
     },
     tooltip: {
-      trigger: 'item',
-      formatter: '{a} <br/>{b}: {c} ({d}%)'
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
     },
-    legend: {
-      orient: 'vertical',
-      left: 'left',
-      data: ['high', 'medium', 'low']
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      data: categories.map(c => c.charAt(0).toUpperCase() + c.slice(1)),
+      axisTick: {
+        alignWithLabel: true
+      }
+    },
+    yAxis: {
+      type: 'value',
+      minInterval: 1 // Ensure whole numbers for note counts
     },
     series: [
       {
-        name: 'Priority',
-        type: 'pie',
-        radius: ['40%', '70%'],
-        avoidLabelOverlap: false,
-        itemStyle: {
-          borderRadius: 10,
-          borderColor: '#fff',
-          borderWidth: 2
-        },
-        label: {
-          show: false,
-          position: 'center'
-        },
-        emphasis: {
-          label: {
-            show: true,
-            fontSize: '18',
-            fontWeight: 'bold'
+        name: 'Number of Notes',
+        type: 'bar',
+        barWidth: '60%',
+        data: data.map((value, index) => ({
+          value,
+          itemStyle: {
+            color: colorList[index]
           }
-        },
-        labelLine: {
-          show: false
-        },
-        data: seriesData,
-        color: ['#ff4d4f', '#faad14', '#52c41a'] // Red for high, yellow for medium, green for low
+        })),
+        label: {
+          show: true,
+          position: 'top',
+          formatter: '{c}'
+        }
       }
     ]
   }
@@ -116,7 +132,7 @@ const chartOption = computed(() => {
 </script>
 
 <style scoped>
-.notes-priority-graph {
+.notes-priority-bar-chart {
   width: 100%;
   padding: 20px;
 }

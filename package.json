@@ -10,7 +10,8 @@
     "build-only": "vite build",
     "build-app": "vite build --config vite.app.config.ts && mv dist-app/* dist",
     "type-check": "vue-tsc --build",
-    "modify-manifest": "tsx scripts/modify-manifest.ts"
+    "modify-manifest": "tsx scripts/modify-manifest.ts",
+    "mcp": "cd ~/dev/qelos/qelos/apps/mcp && npm run mcp"
   },
   "dependencies": {
     "@qelos/sdk": "^3.7.4",
@@ -20,6 +21,7 @@
     "lucide-vue-next": "^0.475.0",
     "vue": "^3.5.13",
     "vue-echarts": "^7.0.3",
+    "vue-i18n": "^11.1.5",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
