@@ -2,6 +2,7 @@
 import QelosSDK from '@qelos/sdk';
 import HelloQelos from './components/HelloQelos.vue';
 import CustomTable from './components/CustomTable.vue';
+import NotesPriorityGraph from './components/NotesPriorityGraph.vue';
 import { ref } from 'vue';
 import { Edit, Delete } from '@element-plus/icons-vue';
 
@@ -131,6 +132,30 @@ const tableData = ref([
   }
 ]);
 
+const notesData = ref([
+  {
+    _id: '1',
+    metadata: {
+      priority: 'high',
+      title: 'High Priority Note'
+    }
+  },
+  {
+    _id: '2',
+    metadata: {
+      priority: 'medium',
+      title: 'Medium Priority Note'
+    }
+  },
+  {
+    _id: '3',
+    metadata: {
+      priority: 'low',
+      title: 'Low Priority Note'
+    }
+  }
+]);
+
 const handleEdit = (row) => {
   console.log('Edit row:', row);
 };
@@ -151,6 +176,14 @@ const handleDelete = (row) => {
         @row-click="(row) => console.log('Row clicked:', row)"
         @edit="handleEdit"
         @delete="handleDelete"
+      />
+
+    </div>
+
+    <div class="section">
+      <h2>Notes Priority Graph</h2>
+      <NotesPriorityGraph 
+        :notes="notesData" 
       />
 
     </div>
