@@ -142,7 +142,7 @@ const handleDelete = (row) => {
 
 <template>
   <div class="app-container">
-    <h1>Qelos Components Demo</h1>
+    <h1>Qelos Components Demo!</h1>
     
     <div class="section">
       <h2>Custom Table Component</h2>
